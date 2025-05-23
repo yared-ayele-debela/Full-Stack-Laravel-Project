@@ -28,4 +28,5 @@ class PaymentController extends Controller
 
         return response()->json($response);
     }
+
 }
