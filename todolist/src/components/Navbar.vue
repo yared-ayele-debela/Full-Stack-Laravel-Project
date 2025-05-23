@@ -5,7 +5,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div class="container py-2">
             <a href="#" class="navbar-brand">
-                <span>Toedoe</span>
+                <span>ToDo</span>
                 <strong>List</strong>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
