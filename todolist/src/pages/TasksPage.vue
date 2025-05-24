@@ -2,6 +2,8 @@
 
 import {allTasks} from "@/http/task-api.js";
 import  {createTask} from "@/http/task-api.js";
+import  {updateTask} from "@/http/task-api.js";
+
 import {computed, onMounted, ref} from "vue";
 import Task from "@/components/tasks/Task.vue";
 import Tasks from "@/components/tasks/Tasks.vue";
@@ -32,6 +34,15 @@ const handleAddedTask = async (newTask) => {
     const {data:createdTask } = await createTask(newTask)
     tasks.value.unshift(createdTask.data)
 }
+
+const handleUpdatedTask = async  (task) =>{
+   const {data: updatedTask} = await updateTask(task.id, {
+        name:task.name
+    })
+
+    const  currentTask = tasks.value.find(item => item.id === task.id)
+    currentTask.name=updatedTask.data.name
+}
 </script>
 
 <template>
@@ -40,10 +51,10 @@ const handleAddedTask = async (newTask) => {
             <div class="row">
                 <div class="col-md-8 offset-md-2">
                     <!-- Add new Task -->
-                    <NewTask @added="handleAddedTask"/>
+                    <NewTask @added="handleAddedTask" />
                     <!-- List of uncompleted tasks -->
 
-                    <Tasks :tasks="uncompletedTasks" />
+                    <Tasks :tasks="uncompletedTasks" @updated="handleUpdatedTask" />
 
                      <!--  show toggle button   -->
                     <div class="text-center my-3" v-show="showToggleComletedBtn">
