@@ -3,7 +3,8 @@
 import {allTasks} from "@/http/task-api.js";
 import  {createTask} from "@/http/task-api.js";
 import  {updateTask} from "@/http/task-api.js";
-
+import  {completeTask} from "@/http/task-api.js"
+import  {removeTask} from "@/http/task-api.js";
 import {computed, onMounted, ref} from "vue";
 import Task from "@/components/tasks/Task.vue";
 import Tasks from "@/components/tasks/Tasks.vue";
@@ -43,6 +44,23 @@ const handleUpdatedTask = async  (task) =>{
     const  currentTask = tasks.value.find(item => item.id === task.id)
     currentTask.name=updatedTask.data.name
 }
+
+const handleCompletedTask = async  (task) =>{
+    const {data: updatedTask} = await completeTask(task.id, {
+        is_completed:task.is_completed
+    })
+
+    const  currentTask = tasks.value.find(item => item.id === task.id)
+    currentTask.is_completed=updatedTask.data.is_completed
+}
+
+const handleRemovedTask = async  (task) =>{
+    await removeTask(task.id)
+
+    const  index = tasks.value.findIndex(item => item.id === task.id)
+    tasks.value.splice(index,1)
+}
+
 </script>
 
 <template>
@@ -54,7 +72,7 @@ const handleUpdatedTask = async  (task) =>{
                     <NewTask @added="handleAddedTask" />
                     <!-- List of uncompleted tasks -->
 
-                    <Tasks :tasks="uncompletedTasks" @updated="handleUpdatedTask" />
+                    <Tasks :tasks="uncompletedTasks" @updated="handleUpdatedTask" @completed="handleCompletedTask" @removed="handleRemovedTask" />
 
                      <!--  show toggle button   -->
                     <div class="text-center my-3" v-show="showToggleComletedBtn">
@@ -68,7 +86,7 @@ const handleUpdatedTask = async  (task) =>{
 
                     <!--  list of completed tasks  -->
 
-                    <Tasks :tasks="completedTasks" :show="completedTaskIsVisible && showCompletedTasks"/>
+                    <Tasks :tasks="completedTasks" :show="completedTaskIsVisible && showCompletedTasks"  @updated="handleUpdatedTask"  @completed="handleCompletedTask" @removed="handleRemovedTask" />
                 </div>
             </div>
         </div>

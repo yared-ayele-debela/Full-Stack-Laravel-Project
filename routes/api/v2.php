@@ -11,5 +11,5 @@ Route::middleware('auth:sanctum')->prefix('v2')->group(function () {
         'destroy' => 'v2.tasks.destroy',
     ]);
 
-    Route::post('/tasks/{id}/completed', [TaskController::class, 'mark_as_completed'])->name('v2.tasks.completed');
+    Route::post('/tasks/{id}/complete', [TaskController::class, 'mark_as_completed'])->name('v2.tasks.completed');
 });
